@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>疫情数据可视化</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background: url(https://uploadfile.bizhizu.cn/up/af/0d/64/af0d642cd0c3ea80522d8d588f16ff13.jpg.source.jpg) no-repeat;
+            background-size: cover;
+        }
+
+        .cd {
+            width: 422px;
+            height: 422px;
+            position: absolute;
+            top: 25%;
+            left: 10%;
+            z-index: 2;
+            border-radius: 50%;
+            border: 10px solid #fff;
+            box-shadow: 5px 5px 15px #000;
+            background-color: #fff;
+        }
+
+        .center {
+            width: 100px;
+            height: 100px;
+            background-color: #000;
+            border-radius: 50%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            margin-left: -50px;
+            margin-top: -50px;
+            z-index: 3;
+            border: 5px solid #fff;
+            background-image: url("http://mms2.baidu.com/it/u=2450492801,2570408754&fm=253&app=138&f=JPEG&fmt=auto&q=75?w=240&h=320");
+            background-position: center center;
+            background-repeat: no-repeat;
+        }
+
+        .kong {
+            position: absolute;
+            top: 25%;
+            left: 50%;
+        }
+
+        h2 {
+            font-family: MD;
+            font-size: 110px;
+            color: white;
+        }
+
+        p {
+            width: 556px;
+            height: 250px;
+            font-family: "微软雅黑";
+            padding-left: 30px;
+            line-height: 30px;
+            background-color: rgba(248, 248, 255, 0.25);
+            box-sizing: border-box;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="cd">
+        <div>
+            <canvas id="myCanvas" width="422" height="422"></canvas>
+            <script>
+                const canvas = document.getElementById("myCanvas");
+                const ctx = canvas.getContext("2d");
+
+                // 数据
+                const data = [
+                    { country: "中国", total: 200, affected: 50 },
+                    { country: "美国", total: 300, affected: 100 },
+                    { country: "法国", total: 150, affected: 75 },
+                    { country: "日本", total: 250, affected: 50 },
+                    { country: "英国", total: 180, affected: 90 },
+                ];
+
+                // 颜色数组
+                const colors = ["#F29EA7", "#FDF1F6", "#ECCED8", "#D1DEF4", "#E5A6BC"];
+
+                // 绘制函数
+                function draw() {
+                    // 清空画布
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                    // 计算数据总和
+                    const total = data.reduce((acc, cur) => acc + cur.total, 0);
+
+                    // 绘制每个数据的扇形
+                    let startAngle = 0;
+                    data.forEach((item, index) => {
+                        const angle = (item.total / total) * Math.PI * 2;
+                        ctx.beginPath();
+                        ctx.fillStyle = colors[index % colors.length];
+                        ctx.moveTo(canvas.width / 2, canvas.height / 2);
+                        ctx.arc(
+                            canvas.width / 2,
+                            canvas.height / 2,
+                            canvas.height / 2,
+                            startAngle,
+                            startAngle + angle
+                        );
+                        ctx.fill();
+
+                        startAngle += angle;
+                    });
+
+                    // 绘制每个数据的文字
+                    ctx.font = "12px Arial";
+                    ctx.fillStyle = "#000";
+                    data.forEach((item, index) => {
+                        const angle = (item.total / total) * Math.PI * 21.8;
+                        const textAngle = startAngle - angle / 2;
+                        const x = canvas.width / 2 + Math.cos(textAngle) * canvas.height * 0.36;
+                        const y = canvas.height / 2 + Math.sin(textAngle) * canvas.height * 0.4;
+                        ctx.fillText(`${item.country} (${item.total})`, x, y);
+                    });
+                }
+
+                draw();
+            </script>
+        </div>
+        <div class="center"></div>
+    </div>
+    <div class="kong">
+        <h2>战疫ing</h2><br />
+        <p style="color: #fff;">
+            疫情对旅游业的影响是非常明显的。疫情期间，大部分国家和地区都采取了旅游限制措施，如关闭边境、禁止外来游客等，这导致了旅游业的严重受损。如左图数据显示，很多国家的旅游业GDP贡献值占比在疫情期间都大幅下降。<br />
+
+            由于旅游业是一个高度依赖人员流动的行业，因此旅游限制措施直接导致旅游收入减少，旅游从业人员失业，旅游企业的盈利能力受到严重影响。此外，由于旅游业的特殊性质，许多其他行业也会受到影响，如餐饮、交通、住宿等，这些行业的业绩也会因旅游限制措施而下降。
+    </div>
+    </div>
+</body>
+
+</html>
